@@ -13,3 +13,6 @@ install: clean
 docker-image: clean
 	docker build -t $(DOCKER_REPO_TAG_NAME) .
 	docker push $(DOCKER_REPO_TAG_NAME)
+
+docker-run-client:
+	docker run -d -p 9001:80 -v `pwd`/fixedclient.py:/usr/local/src/client/client.py gitw-client
