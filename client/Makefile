@@ -9,11 +9,23 @@ install: clean
 	sudo python -m pip install --upgrade pip
 	sudo python -m pip install --upgrade -r requirements.txt
 
-docker-build-river-bidders:
-	docker build -t $(DOCKER_REPO_TAG_NAME) .
+docker-list:
+	docker ps
+
+docker-kill:
+	docker kill gitw-river-bidders
+	docker rm gitw-river-bidders
+
+docker-build:
+	docker build -t gitw-river-bidders .
 
 docker-run-gitw-client:
 	docker run -d -p 9001:80 -v `pwd`/dev_client.py:/usr/local/src/client/client.py gitw-client
 
-docker-run-gitw-river-bidders:
-	docker run -d -p 9001:80 -v `pwd`/dev_client.py:/usr/local/src/client/client.py $(DOCKER_REPO_TAG_NAME)
+docker-run: docker-build
+	docker run --name gitw-river-bidders -d -p 9001:80 gitw-river-bidders
+	docker ps
+	docker logs -f gitw-river-bidders
+
+docker-logs:
+	docker logs -f gitw-river-bidders
