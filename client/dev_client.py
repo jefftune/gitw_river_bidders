@@ -2,9 +2,8 @@ import sys
 import json
 import random
 import traceback
-
+import csv
 import flask
-from pprintpp import pprint
 
 __PYTHON_VERSION__ = 'Python/%d.%d.%d' % (
     sys.version_info[0],
@@ -12,9 +11,12 @@ __PYTHON_VERSION__ = 'Python/%d.%d.%d' % (
     sys.version_info[2]
 )
 
+
 print(__PYTHON_VERSION__)
 
 app = flask.Flask(__name__)
+
+data = {}
 
 def validate_type(type_str):
     if type_str in ('CPC', 'CPA'):
@@ -39,18 +41,18 @@ def get_args_from_list(name_casts):
 
 @app.route('/offer')
 def offer():
-    print('client-offer')
     params = get_args_from_list((('impression_id', unicode),
                                           ('type', validate_type),
                                           ('payout', float),
                                           ('destination', unicode),
                                           ('country', unicode),
                                           ('segment', unicode)))
-    pprint(params)
     if None in params:
         flask.abort(400)
 
-    imp_id, imp_type, conv_payout, conv_dest, demo_country, demo_segment_id = params
+    imp_id, imp_type, conv_payout, conv_dest, country, segment = params
+
+
 
     # TODO: Estimate conversion rate and expected payout to determine the value
     # of this impression. Store model state and your bid for future optimizations.
@@ -59,20 +61,34 @@ def offer():
 
     bid = random.random()
 
+    if imp_id not in data:
+        data[imp_id] = {
+            'imp_type': imp_type,
+            'conv_payout': conv_payout,
+            'conv_dest': conv_dest,
+            'country': country,
+            'segment': segment,
+            'won': False,
+            'converted': False,
+            'offer_bid': float(bid)
+        }
+
     return flask.Response(json.dumps({"bid": bid}), mimetype='application/json')
 
 
 @app.route('/won')
 def won():
-    print('client-won')
     params = get_args_from_list((('impression_id', unicode),
                                           ('type', unicode),
                                           ('payout', float),
                                           ('winning_bid', float)))
-    pprint(params)
     if None in params:
         flask.abort(400)
     imp_id, imp_type, conv_payout, winning_bid = params
+
+    if imp_id in data:
+        data[imp_id]['won'] = True
+        data[imp_id]['winning_bid'] = winning_bid
 
     # TODO: Update model state with the amount actually paid for the impression.
     # This will only be called if you won, and the winning bid will be 0.01 more
@@ -83,20 +99,25 @@ def won():
 
 @app.route('/conversion')
 def conv():
-    print('client-conversion')
     params = get_args_from_list((('impression_id', unicode),
                                           ('type', unicode),
                                           ('payout', float)))
-    pprint(params)
     if None in params:
         flask.abort(400)
     imp_id, imp_type, conv_payout = params
+
+    if imp_id in data:
+        data[imp_id]['converted'] = True
 
     # TODO: Update models for conversion rate and expected payout for the
     # demographics related to this impression. This will only be called if you 
     # won the bid and the impression resulted in a conversion.
 
     return flask.Response(status=204)
+
+@app.route('/stats')
+def stats():
+    return flask.Response(json.dumps(data), mimetype='application/json')
 
 if __name__ == '__main__':
     print('App Begins')
