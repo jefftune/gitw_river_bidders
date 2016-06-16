@@ -16,7 +16,7 @@ docker-kill:
 	docker kill gitw-river-bidders
 	docker rm gitw-river-bidders
 
-docker-build:
+docker-build: docker-kill
 	docker build -t gitw-river-bidders .
 
 docker-run-gitw-client:

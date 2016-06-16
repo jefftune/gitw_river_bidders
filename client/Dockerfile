@@ -13,7 +13,6 @@ WORKDIR /usr/local/src/client/
 
 RUN python --version
 RUN python -m pip install --upgrade -r requirements.txt
-RUN ls -al
 
 EXPOSE 80
 
