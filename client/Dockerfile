@@ -7,7 +7,6 @@ RUN mkdir -p /usr/local/src/ && \
    python -m pip install --upgrade pip && \
    mkdir -p /usr/local/src/client/
 
-
 COPY . /usr/local/src/client/
 
 WORKDIR /usr/local/src/client/
@@ -18,4 +17,4 @@ RUN ls -al
 
 EXPOSE 80
 
-CMD ["python", "hello_world.py"]
+CMD ["python", "client.py"]
