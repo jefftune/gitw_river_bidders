@@ -1,0 +1,12 @@
+.git/
+.pep8
+.pylintrc
+_tmp/
+__pycache__/
+*.json.sample
+*.zip
+README.md
+Makefile
+Makefile.inc
+Makefile_OSX.inc
+*.sh

@@ -1,0 +1,18 @@
+10.130.110.195
+
+zcat < gitw-exchange.tar.gz | docker load
+
+docker run -it -e GITW_CLIENTS="http://192.168.180.38:9000" -v `pwd`/config.json:/var/has/gitw/config.json gitw-exchange
+
+
+docker run -it -e GITW_CLIENTS="http://10.130.110.195:9000" -v `pwd`/config.json:/var/has/gitw/config.json gitw-exchange
+
+
+
+scp -i ~/.ssh/GITW.pem ~/GITW2016/config.json centos@10.130.110.195:
+
+docker run -d -p 9001:80 -v `pwd`/fixedclient.py:/usr/local/src/client/client.py gitw-client
+
+docker run -it -e GITW_CLIENTS="http://10.130.110.195:9000 http://10.130.110.195:9001" -v `pwd`/config.json:/var/has/gitw/config.json gitw-exchange
+
+# modify fixedclient.py to bid 0.20 instead of 0.10, note live reload
