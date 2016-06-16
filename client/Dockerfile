@@ -17,4 +17,4 @@ RUN ls -al
 
 EXPOSE 80
 
-CMD ["python", "client.py"]
+CMD ["python", "-u", "dev_client.py"]

@@ -13,6 +13,7 @@ __PYTHON_VERSION__ = 'Python/%d.%d.%d' % (
     sys.version_info[2]
 )
 
+print('client')
 print(__PYTHON_VERSION__)
 
 app = flask.Flask(__name__)

@@ -5,20 +5,14 @@ import traceback
 
 import flask
 from pprintpp import pprint
-import logging
 
 __PYTHON_VERSION__ = 'Python/%d.%d.%d' % (
-     sys.version_info[0],
-     sys.version_info[1],
-     sys.version_info[2]
+    sys.version_info[0],
+    sys.version_info[1],
+    sys.version_info[2]
 )
 
 print(__PYTHON_VERSION__)
-
-FORMAT = '%(asctime)-15s %(clientip)s %(user)-8s %(message)s'
-logging.basicConfig(format=FORMAT)
-d = {'clientip': '192.168.0.1', 'user': 'fbloggs'}
-logger = logging.getLogger('gitw-river-bidders')
 
 app = flask.Flask(__name__)
 
@@ -45,15 +39,17 @@ def get_args_from_list(name_casts):
 
 @app.route('/offer')
 def offer():
-    logger.info('client-offer')
+    print('client-offer')
     params = get_args_from_list((('impression_id', unicode),
                                           ('type', validate_type),
                                           ('payout', float),
                                           ('destination', unicode),
                                           ('country', unicode),
                                           ('segment', unicode)))
+    pprint(params)
     if None in params:
         flask.abort(400)
+
     imp_id, imp_type, conv_payout, conv_dest, demo_country, demo_segment_id = params
 
     # TODO: Estimate conversion rate and expected payout to determine the value
@@ -68,11 +64,12 @@ def offer():
 
 @app.route('/won')
 def won():
-    logger.info('client-won')
+    print('client-won')
     params = get_args_from_list((('impression_id', unicode),
                                           ('type', unicode),
                                           ('payout', float),
                                           ('winning_bid', float)))
+    pprint(params)
     if None in params:
         flask.abort(400)
     imp_id, imp_type, conv_payout, winning_bid = params
@@ -86,10 +83,11 @@ def won():
 
 @app.route('/conversion')
 def conv():
-    logger.info('client-conversion')
+    print('client-conversion')
     params = get_args_from_list((('impression_id', unicode),
                                           ('type', unicode),
                                           ('payout', float)))
+    pprint(params)
     if None in params:
         flask.abort(400)
     imp_id, imp_type, conv_payout = params
@@ -101,6 +99,5 @@ def conv():
     return flask.Response(status=204)
 
 if __name__ == '__main__':
-
-    logger.info('client-main')
+    print('App Begins')
     app.run(host='0.0.0.0', port=80, debug=True)
