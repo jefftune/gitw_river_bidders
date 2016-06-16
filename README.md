@@ -5,7 +5,7 @@ large tar files not included. Still in SIM drive:
  * `gitw-client.tar.gz`
  * `gitw-exchange.tar.gz`
 
-### start the sample client
+##### start the sample client
 ```bash
 
 $ cd ~
@@ -17,9 +17,9 @@ $ ssh -i ~/.ssh/GITW.pem centos@10.130.110.195
 [centos@ip-10-130-110-195 ~]$ zcat gitw-client.tar.gz | docker load
 [centos@ip-10-130-110-195 ~]$ docker run -d -p 9000:80 gitw-client
 ```
-### congratulations, you're now qualified to enter the competition!
+##### congratulations, you're now qualified to enter the competition!
  
-### start the test exchange server
+##### start the test exchange server
 ```
 $ scp -i ~/.ssh/GITW.pem ~/GITW2016/gitw-exchange.tar.gz centos@10.130.110.195:
 $ scp -i ~/.ssh/GITW.pem ~/GITW2016/config.json centos@10.130.110.195:
@@ -27,9 +27,9 @@ $ ssh -i ~/.ssh/GITW.pem centos@10.130.110.195
 [centos@ip-10-130-110-195 ~]$ zcat gitw-exchange.tar.gz | docker load
 [centos@ip-10-130-110-195 ~]$ docker run -it -e GITW_CLIENTS="http://10.130.110.195:9000" -v `pwd`/config.json:/var/has/gitw/config.json gitw-exchange
 ```
-### watch logs in this terminal to see auction results
+##### watch logs in this terminal to see auction results
  
-### run a modified demo client with live reload
+##### run a modified demo client with live reload
 ```
 $ scp -i ~/.ssh/GITW.pem -r ~/GITW2016/client centos@10.130.110.195:
 $ ssh -i ~/.ssh/GITW.pem centos@10.130.110.195
