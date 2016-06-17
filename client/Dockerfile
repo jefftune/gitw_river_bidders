@@ -16,4 +16,4 @@ RUN python -m pip install --upgrade -r requirements.txt
 
 EXPOSE 80
 
-CMD ["python", "-u", "dev_client.py"]
+CMD ["python", "-u", "client.py"]
