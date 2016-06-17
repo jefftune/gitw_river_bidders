@@ -22,7 +22,7 @@ docker-build: docker-kill
 docker-run-gitw-client:
 	docker run -d -p 9001:80 -v `pwd`/dev_client.py:/usr/local/src/client/client.py gitw-client
 
-docker-run: docker-build
+docker-run:
 	docker run --name gitw-river-bidders -d -p 9001:80 gitw-river-bidders
 	docker ps
 	docker logs -f gitw-river-bidders
